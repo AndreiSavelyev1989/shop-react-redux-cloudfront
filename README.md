@@ -1,12 +1,10 @@
-## Manual deployment links
-
-CloudFront URL: https://dzpcxf60xblo6.cloudfront.net
-S3-website: http://shop-react-redux-cloudfront-270689.s3-website-us-east-1.amazonaws.com
-
 ## Serverless deployment links
 
-CloudFront URL: https://d2wtmavfovzv32.cloudfront.net
-S3-website: http://shop-react-redux-cloudfront-270689-serverless.s3-website-us-east-1.amazonaws.com
+CloudFront URL: 
+[Link to cloudfront website](https://d2xxscw559wzra.cloudfront.net)
+S3-website: 
+[Link to S3 website](http://shop-react-redux-cloudfront-270689-serverless.s3-website-us-east-1.amazonaws.com)
+
 
 # React-shop-cloudfront
 
