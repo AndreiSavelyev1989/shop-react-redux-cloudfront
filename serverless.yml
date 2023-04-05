@@ -7,7 +7,7 @@ provider:
   runtime: nodejs14.x
   region: us-east-1
   # setup profile for AWS CLI.
-  # profile: node-aws
+  profile: Andrei_Savelyeu
 
 plugins:
   - serverless-finch
