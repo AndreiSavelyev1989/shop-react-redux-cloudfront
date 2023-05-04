@@ -2,6 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import axios, { AxiosError } from "axios";
+import { getAuthorizationHeader, getResultMessage } from "~/utils/utils";
 
 type CSVFileImportProps = {
   url: string;
@@ -10,6 +11,11 @@ type CSVFileImportProps = {
 
 export default function CSVFileImport({ url, title }: CSVFileImportProps) {
   const [file, setFile] = React.useState<File>();
+
+  React.useEffect(() => {
+    localStorage.setItem("user_name", "AndreiSavelyev1989");
+    localStorage.setItem("password", "TEST_PASSWORD");
+  }, []);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -25,17 +31,9 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
 
   const uploadFile = async () => {
     if (!file) {
-      console.log("file absent", { file });
       return;
     }
 
-    console.log("uploadFile to", url);
-
-    const password = localStorage.getItem("authorization_token") ?? "";
-
-    console.log({ password });
-
-    // Get the presigned URL
     try {
       const response = await axios({
         method: "GET",
@@ -44,35 +42,31 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
           name: encodeURIComponent(file.name),
         },
         headers: {
-          "Access-Control-Allow-Origin": "*"
-        },
-        auth: {
-          username: "yours_github_account_login",
-          password: password,
+          ...getAuthorizationHeader(),
         },
       });
       console.log("File to upload: ", file.name);
       console.log("Uploading to: ", response.data);
 
-      // const result = await fetch(response.data.url, {
-      //   method: "PUT",
-      //   body: file,
-      // });
+      const result = await fetch(response.data.url, {
+        method: "PUT",
+        body: file,
+      });
 
-      // console.log("Result: ", result);
+      getResultMessage(
+        result.status,
+        `${result.statusText}. File uploaded successfully!`
+      );
+      console.log("Result: ", result);
       setFile(undefined);
     } catch (err) {
       const error = err as AxiosError;
       console.log("Error", error);
       if (error?.response?.status === 403) {
-        alert(
-          "403 Forbidden \nLocal Storage has wrong authorization_token (password)"
-        );
+        getResultMessage(error.response.status, error.message);
       }
       if (error?.response?.status === 401) {
-        alert(
-          "401 Unauthorized \nLocal Storage has not authorization_token (password)"
-        );
+        getResultMessage(error.response.status, error.message);
       }
     }
   };
